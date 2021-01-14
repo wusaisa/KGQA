@@ -10,18 +10,18 @@ vm.max_map_count = 655360
 sysctl -p 
 ```
 
-## 安装环境
+## 安装环境(dockerUI-elasticsearch-neo4j-kibana-mysql)
 ```shell
 git clone https://github.com/wusaisa/KGQA.git
 cd ./KGQA
 docker-compose -f env-compose.yml up -d
 ```
 
-### 安装后台服务环境
+### 安装后台服务环境(uvicorn-gunicorn-fastapi)
 ```shell
 git clone https://github.com/wusaisa/KGQA.git
 cd ./KGQA
-docker built -t kgqa:1.0 .
+docker build -t kgqa:1.0 .
 docker run -d -p 11000:80 --name kgqa --restart=always kgqa:1.0
 ```
 

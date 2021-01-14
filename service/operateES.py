@@ -94,8 +94,8 @@ def find_key(index, doc, word):
 if __name__ == '__main__':
     que_index = 'que_index'
     que_doc = 'que_doc'
-    # delete_index(que_index, True)
-    # create_index(que_index, que_doc)
-    # batch_data(que_index, que_doc, 10000)
+    # delete_index(que_index, True)  # 删除索引
+    # create_index(que_index, que_doc)  # 创建索引
+    # batch_data(que_index, que_doc, 10000)  # 批量插入
     r = find_key(que_index, que_doc, '玉米大斑病什么病原')
     print(r)
