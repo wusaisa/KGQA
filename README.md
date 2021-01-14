@@ -27,3 +27,9 @@ docker run -d -p 11000:80 --name kgqa --restart=always kgqa:1.0
 
 ### 单元测试
 `http://localhost:11000/docs`
+
+### 插入数据在es，执行命令
+```shell
+pip3 install -r requirements.txt -i https://pypi.douban.com/simple
+python3 operateES.py
+```

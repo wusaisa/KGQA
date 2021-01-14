@@ -6,7 +6,7 @@
 # @Notes : ES的一些简单操作
 from elasticsearch import Elasticsearch, helpers
 
-from config import QUE_TXT, HOST_LIST
+from config import QUE_TXT, HOST_LIST, QUE_INDEX, QUE_DOC
 
 es = Elasticsearch(HOST_LIST)
 
@@ -92,10 +92,8 @@ def find_key(index, doc, word):
 
 
 if __name__ == '__main__':
-    que_index = 'que_index'
-    que_doc = 'que_doc'
-    # delete_index(que_index, True)  # 删除索引
-    # create_index(que_index, que_doc)  # 创建索引
-    # batch_data(que_index, que_doc, 10000)  # 批量插入
-    r = find_key(que_index, que_doc, '玉米大斑病什么病原')
+    delete_index(QUE_INDEX, True)  # 删除索引
+    create_index(QUE_INDEX, QUE_DOC)  # 创建索引
+    batch_data(QUE_INDEX, QUE_DOC, 10000)  # 批量插入
+    r = find_key(QUE_INDEX, QUE_DOC, '玉米大斑病什么病原')
     print(r)

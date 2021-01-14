@@ -19,7 +19,7 @@ def qa(question: str = Query(..., description='一句问话')):
             similar = similarity(question)
             return ResponseModal(code=200, data=data, sentence=similar)
         else:
-            rec = recommend(question)
+            rec = recommend()
             return ResponseModal(code=201, sentence=rec)
     except Exception as e:
         return ResponseModal(code=400, msg=str(e))
@@ -27,5 +27,8 @@ def qa(question: str = Query(..., description='一句问话')):
 
 @app.get('/wss/hot', summary='热点问题', response_model=ResponseModal)
 def hot(num: int = Query(..., description='数量')):
-    h = get_hot(num)
-    return ResponseModal(sentence=h)
+    try:
+        h = get_hot(num)
+        return ResponseModal(sentence=h)
+    except Exception as e:
+        return ResponseModal(code=400, msg=str(e))

@@ -15,3 +15,36 @@ HOST_LIST = [
     {"host": "127.0.0.1", "port": 9201},
     {"host": "127.0.0.1", "port": 9202}
 ]
+
+QUE_INDEX = 'que_index'
+QUE_DOC = 'que_doc'
+
+DATABASES_INFO = [
+    {
+        'db_name': 'wss',
+        'tb_info': [
+            {
+                'tb_name': 'hot',
+                'columns': [
+                    ('question', 'varchar(20)', 1),
+                    ('id', 'int', 1),
+                    ('num', 'int', 0)
+                ]
+            },
+            {
+                'tb_name': 'answer',
+                'columns': [
+                    ('question', 'varchar(255)', None),
+                    ('id', 'int', 0),
+                    ('data', 'varchar(255)', None),
+                    ('sentence', 'text', None)
+                ]
+            }
+        ]
+    }
+]
+
+HOST = '127.0.0.1'
+USER = 'root'
+PASSWORD = 'password'
+CHARSET = 'utf8'
