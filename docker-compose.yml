@@ -114,9 +114,11 @@ services:
     build: .
     container_name: kgqa
     ports:
-      - '11000:5000'
+      - '11000:80'
     networks:
       - net-es
+    volumes:
+      - ./data/questions.txt:/data/questions.txt
 
 networks:
   net-es:
