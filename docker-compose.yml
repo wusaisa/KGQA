@@ -18,6 +18,8 @@ services:
       - '7687:7687'
     volumes:
       - ./data:/var/lib/neo4j/import
+    networks:
+      - net-es
 
   es01:
     restart: always
@@ -104,7 +106,17 @@ services:
       - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: password
+    networks:
+      - net-es
 
+  kgqa:
+    restart: always
+    build: .
+    container_name: kgqa
+    ports:
+      - '11000:5000'
+    networks:
+      - net-es
 
 networks:
   net-es:

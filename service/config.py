@@ -11,9 +11,9 @@ DATA_DIR = os.path.join(os.path.dirname(CUR_DIR), 'data')  # 数据文件夹路�
 QUE_TXT = os.path.join(DATA_DIR, 'questions.txt')
 
 HOST_LIST = [
-    {"host": "127.0.0.1", "port": 9200},
-    {"host": "127.0.0.1", "port": 9201},
-    {"host": "127.0.0.1", "port": 9202}
+    {"host": 'es01', "port": 9200},
+    {"host": 'es02', "port": 9201},
+    {"host": 'es03', "port": 9202}
 ]
 
 QUE_INDEX = 'que_index'
@@ -44,7 +44,8 @@ DATABASES_INFO = [
     }
 ]
 
-HOST = '127.0.0.1'
+HOST = 'mysql'
 USER = 'root'
 PASSWORD = 'password'
-CHARSET = 'utf8'
+CHARSET = 'utf8mb4'
+DB = DATABASES_INFO[0]['db_name']

@@ -6,7 +6,7 @@
 # @Notes : ES的一些简单操作
 from elasticsearch import Elasticsearch, helpers
 
-from config import QUE_TXT, HOST_LIST, QUE_INDEX, QUE_DOC
+from config import QUE_TXT, HOST_LIST
 
 es = Elasticsearch(HOST_LIST)
 
@@ -73,11 +73,12 @@ def batch_data(index, doc, count=5000):
         helpers.bulk(es, action)
 
 
-def find_key(index, doc, word):
+def find_key(index, doc, word, size=5):
     """查找信息
     :param index: 索引
     :param doc: 文档
     :param word: 关键词
+    :param size: 搜索的条数
     :return: 文本数据
     """
     search = {
@@ -87,13 +88,5 @@ def find_key(index, doc, word):
             }
         }
     }
-    result = es.search(body=search, index=index, size=5, doc_type=doc)
+    result = es.search(body=search, index=index, size=size, doc_type=doc)
     return [item['_source']['word'] for item in result['hits']['hits']]
-
-
-if __name__ == '__main__':
-    delete_index(QUE_INDEX, True)  # 删除索引
-    create_index(QUE_INDEX, QUE_DOC)  # 创建索引
-    batch_data(QUE_INDEX, QUE_DOC, 10000)  # 批量插入
-    r = find_key(QUE_INDEX, QUE_DOC, '玉米大斑病什么病原')
-    print(r)
