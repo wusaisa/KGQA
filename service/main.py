@@ -14,8 +14,10 @@ app = FastAPI(title='回答系统接口', description='专业植物病理回答�
 
 @app.get('/wss/createMysql', summary='初始化MYSQL数据库和表结构')
 def create_mysql():
-    with MySQL(HOST, USER, PASSWORD, CHARSET) as ms:
-        ms.create_database(DATABASES_INFO)  # 创建数据库
+    with MySQL(HOST, USER, PASSWORD, CHARSET, DB, create_db=True) as ms:
+        ms.create_database()  # 创建数据库
+    with MySQL(HOST, USER, PASSWORD, CHARSET, DB) as ms:
+        ms.create_tables()  # 创建表结构
     return {'code': 200, 'msg': '创建数据库成功'}
 
 
@@ -27,13 +29,19 @@ def create_es():
     return {'code': 200, 'msg': '创建ElasticSearch数据成功'}
 
 
+@app.get('/wss/createRedis', summary='初始化Redis数据')
+def create_redis():
+    with MySQL(HOST, USER, PASSWORD, CHARSET, DB) as ms:
+        ms.init_redis_hot()
+    return {'code': 200, 'msg': '创建Redis数据成功'}
+
+
 @app.get('/wss/qa', summary='回答接口', response_model=ResponseModal)
 def qa(
         question: str = Query(..., description='一句问话', min_length=2),
         num: int = Query(5, description='返回推荐问或者相似问条数')):
     try:
         data = answer(question)
-        insert_hot(question)
         if data:
             sentence = similarity(question, num)
             code = 200

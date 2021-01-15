@@ -119,6 +119,16 @@ services:
       - net-es
     volumes:
       - ./data/questions.txt:/data/questions.txt
+      - ./service:/app
+
+  redis:
+    restart: always
+    image: 'redis:alpine3.12'
+    container_name: redis
+    ports:
+      - '6379:6379'
+    networks:
+      - net-es
 
 networks:
   net-es:

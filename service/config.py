@@ -14,38 +14,13 @@ HOST_LIST = [
     {"host": 'es01', "port": 9200},
     {"host": 'es02', "port": 9201},
     {"host": 'es03', "port": 9202}
-]
+]  # es的ip
 
-QUE_INDEX = 'que_index'
-QUE_DOC = 'que_doc'
-
-DATABASES_INFO = [
-    {
-        'db_name': 'wss',
-        'tb_info': [
-            {
-                'tb_name': 'hot',
-                'columns': [
-                    ('question', 'varchar(20)', 1),
-                    ('id', 'int', 1),
-                    ('num', 'int', 0)
-                ]
-            },
-            {
-                'tb_name': 'answer',
-                'columns': [
-                    ('question', 'varchar(255)', None),
-                    ('id', 'int', 0),
-                    ('data', 'varchar(255)', None),
-                    ('sentence', 'text', None)
-                ]
-            }
-        ]
-    }
-]
-
-HOST = 'mysql'
-USER = 'root'
-PASSWORD = 'password'
-CHARSET = 'utf8mb4'
-DB = DATABASES_INFO[0]['db_name']
+QUE_INDEX = 'que_index'  # es的索引
+QUE_DOC = 'que_doc'  # es的文档
+HOST = 'mysql'  # mysql的ip地址
+USER = 'root'  # mysql的账号
+PASSWORD = 'password'  # mysql的密码
+DB = 'wss'  # mysql的数据库
+REDIS_HOST = 'redis'  # redis的ip
+CHARSET = 'utf8mb4'  # mysql的编码

@@ -12,27 +12,32 @@ vm.max_map_count = 655360
 sysctl -p 
 ```
 
-## 安装环境(dockerUI-elasticsearch-neo4j-kibana-mysql) + 安装后台服务环境(uvicorn-gunicorn-fastapi)
+## 安装环境(dockerUI-elasticsearch-neo4j-kibana-mysql+redis) + 安装后台服务环境(uvicorn-gunicorn-fastapi)
 
 ```shell
 git clone https://github.com/wusaisa/KGQA.git
 cd ./KGQA
-docker-compose -f env-compose.yml up -d
+docker-compose up -d
 ```
 
 ### 单元测试地址
+
 `http://localhost:11000/docs`
 
 ### dockerUi地址:账号admin，密码自己设置
+
 `http://localhost:9000/#/init/admin`
 
 ### kibana地址
+
 `http://localhost:5601/app/kibana`
 
 ### neo4j地址：账号/密码都是neo4j
+
 `http://localhost:7474/browser/`
 
 ### mysql的配置
+
 ```python
 HOST = 'mysql'
 USER = 'root'
@@ -40,3 +45,17 @@ PASSWORD = 'password'
 CHARSET = 'utf8mb4'
 DB = 'wss'
 ```
+
+### 访问网页初始化Mysql
+
+`http://localhost:11000/wss/createMysql`
+
+### 访问网页初始化ES
+
+`http://localhost:11000/wss/createES`
+
+### 访问网页初始化Redis
+
+`http://localhost:11000/wss/createRedis`
+
+### 注意:如果数据库初始化那么redis也要初始化

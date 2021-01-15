@@ -10,7 +10,7 @@ from pydantic import BaseModel
 
 from config import *
 from operateES import find_key
-from sql import MySQL
+from operateSQL import MySQL
 
 
 class ResponseModal(BaseModel):
@@ -52,14 +52,9 @@ def get_hot(num: int) -> list:
     return result
 
 
-def insert_hot(question: str):
-    """插入热点问题"""
-    with MySQL(HOST, USER, PASSWORD, CHARSET, db=DB) as ms:
-        ms.add_hot(question)
-
-
 def insert_answer(question: str, data: str, sentence: list):
     """插入问答返回数据"""
     st = json.dumps(sentence, ensure_ascii=False)
     with MySQL(HOST, USER, PASSWORD, CHARSET, db=DB) as ms:
+        ms.add_hot(question)
         ms.add_answer(question, data, st)
