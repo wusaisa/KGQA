@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from config import *
 from operateES import find_key
+from operateNeo4j import find_neo4j
 from operateSQL import MySQL
 
 
@@ -38,9 +39,31 @@ def recommend(sentence: str, num=5) -> list:
     return ['玉米大斑病什么病原？', '玉米大斑病病原', '玉米大斑病的病原属于什么性质']
 
 
+def get_data(ls, sentence):
+    """根据数据库数据去匹配字段"""
+    data = []
+    for line in ls:
+        if line[0] in sentence:
+            data.append(line[0])
+    if data:
+        return max(data, key=lambda x: len(x))
+    return None
+
+
 def answer(sentence: str) -> str:
     """搜索问句的答案"""
-    return '玉米大斑病'
+    with MySQL(HOST, USER, PASSWORD, CHARSET, db=DB) as ms:
+        entity = get_data(ms.select_entity(), sentence)
+        node = get_data(ms.select_node(), sentence)
+        # relation = get_data(ms.select_relation(), sentence)
+        relation = None
+        if entity and node:  # 当主节点和节点同时存在，去检查是否正确
+            if ms.check_entity_node(entity, node):
+                relation = None
+            else:
+                node = None
+    data = find_neo4j(entity=entity, node=node, relation=relation)
+    return data
 
 
 def get_hot(num: int) -> list:

@@ -7,6 +7,7 @@
 from fastapi import FastAPI, Query
 
 from operateES import delete_index, create_index, batch_data
+from operateNeo4j import init_neo4j
 from service import *
 
 app = FastAPI(title='回答系统接口', description='专业植物病理回答系统', version='1.0')
@@ -18,6 +19,8 @@ def create_mysql():
         ms.create_database()  # 创建数据库
     with MySQL(HOST, USER, PASSWORD, CHARSET, DB) as ms:
         ms.create_tables()  # 创建表结构
+        ms.init_neo4j()  # 初始化neo4j数据到数据库
+        ms.init_es()  # 初始化es数据到数据库
     return {'code': 200, 'msg': '创建数据库成功'}
 
 
@@ -34,6 +37,12 @@ def create_redis():
     with MySQL(HOST, USER, PASSWORD, CHARSET, DB) as ms:
         ms.init_redis_hot()
     return {'code': 200, 'msg': '创建Redis数据成功'}
+
+
+@app.get('/wss/createNeo4j', summary='初始化Neo4j数据')
+def create_neo4j():
+    init_neo4j()
+    return {'code': 200, 'msg': '创建Neo4j数据成功'}
 
 
 @app.get('/wss/qa', summary='回答接口', response_model=ResponseModal)

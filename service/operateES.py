@@ -6,7 +6,8 @@
 # @Notes : ES的一些简单操作
 from elasticsearch import Elasticsearch, helpers
 
-from config import QUE_TXT, HOST_LIST
+from config import *
+from operateSQL import MySQL
 
 es = Elasticsearch(HOST_LIST)
 
@@ -49,9 +50,10 @@ def batch_data(index, doc, count=5000):
     """
     action = []
     flag = 0
-    with open(QUE_TXT, encoding='utf-8')as fp:
-        for i, line in enumerate(fp):
-            line = line.strip()
+    with MySQL(HOST, USER, PASSWORD, CHARSET, DB) as ms:
+        ls = ms.select_es()
+        for i, line in enumerate(ls):
+            line = line[0]
             if line:
                 data = {
                     'id': i,

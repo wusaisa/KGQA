@@ -5,9 +5,8 @@
 ## 需要修改系统配置
 
 ```shell
-vim /etc/sysctl.conf
 # 最后一行追加
-vm.max_map_count = 655360
+echo vm.max_map_count=655360 >> /etc/sysctl.conf
 # 执行命令重新加载
 sysctl -p 
 ```

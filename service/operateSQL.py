@@ -7,6 +7,7 @@
 import pymysql
 import redis_lock
 
+from config import QUE_TXT, NEO_TXT
 from operateRedis import sr
 
 
@@ -43,8 +44,24 @@ class MySQL:
             `num`      int DEFAULT NULL COMMENT '问句出现的次数',
             PRIMARY KEY (`id`) USING BTREE
         ) ENGINE = InnoDB DEFAULT CHARSET = {self.charset} COLLATE = utf8mb4_0900_ai_ci;""".replace('\n', '')
+        neo4j = f"""CREATE TABLE IF NOT EXISTS `neo4j`
+        (
+            `id`       int          NOT NULL AUTO_INCREMENT,
+            `entity`   varchar(255) NOT NULL COMMENT '节点',
+            `relation` varchar(255) NOT NULL COMMENT '关系',
+            `node`     varchar(255) NOT NULL COMMENT '节点',
+            PRIMARY KEY (`id`) USING BTREE
+        ) ENGINE = InnoDB DEFAULT CHARSET = {self.charset} COLLATE = utf8mb4_0900_ai_ci;""".replace('\n', '')
+        es = f"""CREATE TABLE IF NOT EXISTS `es`
+               (
+                   `id`       int          NOT NULL AUTO_INCREMENT,
+                   `question` varchar(255) NOT NULL COMMENT '问句',
+                   PRIMARY KEY (`id`) USING BTREE
+               ) ENGINE = InnoDB DEFAULT CHARSET = {self.charset} COLLATE = utf8mb4_0900_ai_ci;""".replace('\n', '')
         self.cursor.execute(answer)
         self.cursor.execute(hot)
+        self.cursor.execute(neo4j)
+        self.cursor.execute(es)
         print('创建表完毕')
 
     def __enter__(self):
@@ -100,3 +117,53 @@ class MySQL:
         sr.flushall()
         for line in self.cursor.fetchall():
             sr.set(line[0], 1)
+
+    def init_neo4j(self):
+        """保存neo4j数据到数据库"""
+        with open(NEO_TXT) as fp:
+            for line in fp.readlines()[1:]:
+                ls = line.strip().split(',')
+                if len(ls) == 3 and all(ls):
+                    sql = f"INSERT INTO neo4j(entity,relation,node) value ('{ls[0]}','{ls[1]}','{ls[2]}')"
+                    self.cursor.execute(sql)
+
+    def init_es(self):
+        """保存es数据到数据库"""
+        with open(QUE_TXT) as fp:
+            for line in fp:
+                if line.strip():
+                    sql = f"INSERT INTO es(question) value ('{line.strip()}')"
+                    self.cursor.execute(sql)
+
+    def select_es(self):
+        """获取es数据库的全部数据"""
+        sql = 'SELECT question FROM es'
+        return self.select_sql(sql)
+
+    def select_neo4j(self):
+        """获取es数据库的全部数据"""
+        sql = 'SELECT entity,relation,node FROM neo4j'
+        return self.select_sql(sql)
+
+    def select_sql(self, sql):
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()
+
+    def select_entity(self):
+        sql = 'SELECT DISTINCT entity FROM neo4j'
+        return self.select_sql(sql)
+
+    def select_node(self):
+        sql = 'SELECT DISTINCT node FROM neo4j'
+        return self.select_sql(sql)
+
+    def select_relation(self):
+        sql = 'SELECT DISTINCT relation FROM neo4j'
+        return self.select_sql(sql)
+
+    def check_entity_node(self, entity, node):
+        sql = f'SELECT * FROM neo4j where entity="{entity}" and node="{node}"'
+        result = self.cursor.execute(sql)
+        if result > 0:
+            return True
+        return False
