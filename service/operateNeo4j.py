@@ -32,7 +32,6 @@ def init_neo4j():
 def find_neo4j(*, entity=None, node=None, relation=None):
     """查询关系"""
     print(entity, relation, node)
-    print(all([relation, node]))
     if (relation is None) and all([entity, node]):
         cypher = 'match(a:Entity{name:"%s"}) - [r] -> (b:Node{name:"%s"}) return r.name' % (entity, node)
     elif (entity is None) and all([relation, node]):

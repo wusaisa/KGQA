@@ -36,7 +36,7 @@ def recommend(sentence: str, num=5) -> list:
     :param sentence: 问句
     :param num: 返回推荐问前几条
     """
-    return ['玉米大斑病什么病原？', '玉米大斑病病原', '玉米大斑病的病原属于什么性质']
+    return similarity(sentence, num)
 
 
 def get_data(ls, sentence):
@@ -50,7 +50,7 @@ def get_data(ls, sentence):
     return None
 
 
-def answer(sentence: str) -> str:
+def answer(sentence: str) -> tuple:
     """搜索问句的答案"""
     with MySQL(HOST, USER, PASSWORD, CHARSET, db=DB) as ms:
         entity = get_data(ms.select_entity(), sentence)
@@ -63,7 +63,7 @@ def answer(sentence: str) -> str:
             else:
                 node = None
     data = find_neo4j(entity=entity, node=node, relation=relation)
-    return data
+    return data, entity
 
 
 def get_hot(num: int) -> list:

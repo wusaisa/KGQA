@@ -50,12 +50,15 @@ def qa(
         question: str = Query(..., description='一句问话', min_length=2),
         num: int = Query(5, description='返回推荐问或者相似问条数')):
     try:
-        data = answer(question)
+        data, entity = answer(question)
         if data:
             sentence = similarity(question, num)
             code = 200
+        elif entity:
+            sentence = recommend(entity, num)
+            code = 201
         else:
-            sentence = recommend(question, num)
+            sentence = []
             code = 201
         insert_answer(question, data, sentence)
         return ResponseModal(code=code, sentence=sentence, data=data)
