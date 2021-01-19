@@ -9,6 +9,7 @@ import json
 from pydantic import BaseModel
 
 from config import *
+from model import prediction_model
 from operateES import find_key
 from operateNeo4j import find_neo4j
 from operateSQL import MySQL
@@ -55,13 +56,9 @@ def answer(sentence: str) -> tuple:
     with MySQL(HOST, USER, PASSWORD, CHARSET, db=DB) as ms:
         entity = get_data(ms.select_entity(), sentence)
         node = get_data(ms.select_node(), sentence)
-        # relation = get_data(ms.select_relation(), sentence)
-        relation = None
-        if entity and node:  # 当主节点和节点同时存在，去检查是否正确
-            if ms.check_entity_node(entity, node):
-                relation = None
-            else:
-                node = None
+    relation = prediction_model(sentence)
+    if entity and node:
+        node = None
     data = find_neo4j(entity=entity, node=node, relation=relation)
     return data, entity
 

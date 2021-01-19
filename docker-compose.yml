@@ -123,6 +123,7 @@ services:
     volumes:
       - ./data/questions.txt:/data/questions.txt
       - ./data/relation.csv:/data/relation.csv
+      - ./model:/model
       - ./service:/app
 
   redis:
