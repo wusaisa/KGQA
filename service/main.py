@@ -60,7 +60,7 @@ def qa(
         else:
             sentence = []
             code = 201
-        insert_answer(question, data, sentence)
+        insert_answer(question, '|'.join(data), sentence)
         return ResponseModal(code=code, sentence=sentence, data=data)
     except Exception as e:
         return ResponseModal(code=400, msg=str(e))

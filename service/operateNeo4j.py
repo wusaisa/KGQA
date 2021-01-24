@@ -29,7 +29,7 @@ def init_neo4j():
             graph.create(ab)
 
 
-def find_neo4j(*, entity=None, node=None, relation=None):
+def find_neo4j(*, entity=None, node=None, relation=None) -> list:
     """查询关系"""
     print(entity, relation, node)
     if (relation is None) and all([entity, node]):
@@ -39,7 +39,8 @@ def find_neo4j(*, entity=None, node=None, relation=None):
     elif all([entity, relation]):
         cypher = 'match(a:Entity{name:"%s"}) - [r] -> (b:Node) where r.name="%s" return b.name' % (entity, relation)
     else:
-        return ''
+        return []
     print(cypher)
-    data = graph.evaluate(cypher)
-    return data or ''
+    data = graph.run(cypher).to_table()
+    result = [i[0] for i in set(data) if i[0]]
+    return result
