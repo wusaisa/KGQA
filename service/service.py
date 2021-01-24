@@ -19,7 +19,7 @@ class ResponseModal(BaseModel):
     """返回格式类型"""
     msg: str = 'success'
     code: int = 200
-    data: str = []
+    data: list = []
     sentence: list = []
 
 
