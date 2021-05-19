@@ -127,13 +127,27 @@ services:
   relation:
     restart: always
     build:
-      context: relation/.
+      context: relation
     image: relation
     container_name: relation
     ports:
       - "11001:80"
     networks:
       - net-es
+
+  front:
+    restart: always
+    image: nginx:latest
+    ports:
+      - '8080:80'
+    container_name: front
+    networks:
+      - net-es
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+    environment:
+      - NGINX_HOST=qa.caas360.cn
+      - NGINX_PORT=80
 
 networks:
   net-es:

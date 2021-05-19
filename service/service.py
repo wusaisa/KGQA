@@ -56,7 +56,7 @@ def answer(sentence: str) -> tuple:
     with MySQL(HOST, USER, PASSWORD, CHARSET, db=DB) as ms:
         entity = get_data(ms.select_entity(), sentence)
         node = get_data(ms.select_node(), sentence)
-    result = requests.get(f'http://{RELATION_IP}:11001/relation?question={sentence}').json()
+    result = requests.get(f'http://{RELATION_IP}/relation?question={sentence}').json()
     if result['code'] == 200:
         relation = result['text']
         if entity and node:
