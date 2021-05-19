@@ -144,7 +144,7 @@ services:
     networks:
       - net-es
     volumes:
-      - ./dist:/usr/share/nginx/html:ro
+      - ./html:/usr/share/nginx/html:ro
     environment:
       - NGINX_HOST=qa.caas360.cn
       - NGINX_PORT=80
