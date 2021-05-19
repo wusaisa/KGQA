@@ -9,10 +9,10 @@ import json
 from pydantic import BaseModel
 
 from config import *
-from model import prediction_model
 from operateES import find_key
 from operateNeo4j import find_neo4j
 from operateSQL import MySQL
+import requests
 
 
 class ResponseModal(BaseModel):
@@ -56,11 +56,14 @@ def answer(sentence: str) -> tuple:
     with MySQL(HOST, USER, PASSWORD, CHARSET, db=DB) as ms:
         entity = get_data(ms.select_entity(), sentence)
         node = get_data(ms.select_node(), sentence)
-    relation = prediction_model(sentence)
-    if entity and node:
-        node = None
-    data = find_neo4j(entity=entity, node=node, relation=relation)
-    return data, entity
+    result = requests.get(f'http://{RELATION_IP}:11001/relation?question={sentence}').json()
+    if result['code'] == 200:
+        relation = result['text']
+        if entity and node:
+            node = None
+        data = find_neo4j(entity=entity, node=node, relation=relation)
+        return data, entity
+    assert Exception("找不到关系错误！")
 
 
 def get_hot(num: int) -> list:

@@ -27,3 +27,4 @@ REDIS_HOST = 'redis'  # redis的ip
 CHARSET = 'utf8mb4'  # mysql的编码
 NEO4J_IP = 'neo4j'
 NEO4J_PASSWD = 'password'
+RELATION_IP = 'relation'

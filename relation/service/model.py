@@ -1,5 +1,3 @@
-import os
-
 import torch
 import torch.nn as nn
 from pytorch_pretrained_bert import BertModel, BertTokenizer
@@ -9,9 +7,8 @@ class Config:
     """配置参数"""
 
     def __init__(self):
-        cru = os.path.dirname(os.path.dirname(__file__))
         self.class_list = [str(i) for i in range(11)]  # 类别名单
-        self.save_path = os.path.join(cru, 'model/ernie/ERNIE.ckpt')
+        self.save_path = '/app/model/ERNIE'
         self.device = torch.device('cpu')
         self.require_improvement = 1000  # 若超过1000batch效果还没提升，则提前结束训练
         self.num_classes = len(self.class_list)  # 类别数
@@ -19,7 +16,7 @@ class Config:
         self.batch_size = 128  # mini-batch大小
         self.pad_size = 32  # 每句话处理成的长度(短填长切)
         self.learning_rate = 5e-5  # 学习率
-        self.bert_path = os.path.join(cru, 'model/bert')
+        self.bert_path = '/app/model/bert'
         self.tokenizer = BertTokenizer.from_pretrained(self.bert_path)
         self.hidden_size = 768
 
