@@ -10,6 +10,8 @@ wget https://oss.jtyoui.com/data/wss-model.tar.gz
 -- data
 -- relation
 --    model
+--      bert
+--      ERNIE
 --    service
 ```
 
