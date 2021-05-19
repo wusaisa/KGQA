@@ -2,6 +2,17 @@
 
 一个问答系统
 
+# 下载模型。下载到relation文件夹下
+```
+wget https://oss.jtyoui.com/data/wss-model.tar.gz
+# 解压到数据放在relation/model
+
+-- data
+-- relation
+--    model
+--    service
+```
+
 # 一键安装(忽略下面的文档)
 ```shell
 sh start.sh
